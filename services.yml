@@ -1,0 +1,85 @@
+version: "3"
+services:
+  mysqldb:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    volumes:
+      - ./volumes/dbstore:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+    container_name: mysqldb
+  hadoop-base:
+    build:
+      context: ./images/hadoop
+      dockerfile: Dockerfile
+    image: hadoop-base:3.3.1
+  hdfs-nn:
+    image: hadoop-base:3.3.1
+    depends_on:
+      - hadoop-base
+    ports:
+      - "8020:8020"
+      - "50070:50070"
+      - "50470:50470"
+    volumes:
+      - ./volumes/hdfs/nn:/nn
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+    command: hdfs-nn
+    container_name: hdfs-nn
+  hdfs-snn:
+    image: hadoop-base:3.3.1      
+    depends_on:
+      - hdfs-nn
+    ports:
+      - "50090:50090"
+      - "9868:9868"
+      - "9869:9869"
+    volumes:
+      - ./volumes/hdfs/snn:/snn
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+    command: hdfs-snn
+    container_name: hdfs-snn
+  hdfs-dn:
+    image: hadoop-base:3.3.1      
+    depends_on:
+      - hdfs-snn
+    ports:
+      - "50075:50075"
+      - "50475:50475"
+      - "50010:50010"
+      - "50020:50020"
+      - "9864:9864"
+    volumes:
+      - ./volumes/hdfs/dn:/dn
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+    command: hdfs-dn
+    container_name: hdfs-dn
+  yarn-rm:
+    image: hadoop-base:3.3.1
+    depends_on:
+      - hdfs-dn
+    ports:
+      - "8032:8032"
+      - "8030:8030"
+      - "8088:8088"
+    volumes:
+      - ./volumes/yarn:/yarn
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+    command: yarn-rm
+    container_name: yarn-rm
+  yarn-nm:
+    image: hadoop-base:3.3.1
+    depends_on:
+      - yarn-rm
+    ports:
+      - "8042:8042"
+      - "8044:8044"
+    volumes:
+      - ./volumes/yarn:/yarn
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+    command: yarn-nm
+    container_name: yarn-nm

@@ -1,0 +1,32 @@
+<configuration>
+    <property>
+        <name>dfs.namenode.rpc-address</name>
+        <value>hdfs-nn:8020</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address</name>
+        <value>hdfs-nn:50070</value>
+    </property>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/nn</value>
+        <final>true</final>
+    </property>
+    <property>
+        <name>dfs.namenode.checkpoint.dir</name>
+        <value>/snn</value>
+    </property>
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/dn</value>
+        <final>true</final>
+    </property>
+    <property>
+        <name>dfs.blocksize</name>
+        <value>128m</value>
+    </property>
+</configuration>
