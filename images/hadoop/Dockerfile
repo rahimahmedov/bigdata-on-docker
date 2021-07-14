@@ -27,4 +27,6 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
 COPY entrypoint.sh ./ 
 RUN chmod +x ./entrypoint.sh
 
+RUN useradd hdfs
+
 ENTRYPOINT ["/root/entrypoint.sh"]
