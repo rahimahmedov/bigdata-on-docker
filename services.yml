@@ -83,3 +83,19 @@ services:
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: yarn-nm
     container_name: yarn-nm
+  hive-base:
+    build:
+      context: ./images/hive
+      dockerfile: Dockerfile
+    image: hive-base:3.1.2
+  hiveserver:
+    image: hive-base:3.1.2 
+    depends_on:
+      - hive-base
+      - yarn-nm
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+    command: hiveserver2
+    container_name: hiveserver
