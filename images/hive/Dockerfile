@@ -17,7 +17,8 @@ ENV HIVE_CONF_DIR /etc/hadoop/conf
 ENV METASTORE_HOME $HIVE_HOME
 
 COPY mysql-connector-java_8.0.25-1ubuntu20.04_all.deb ./
-RUN dpkg -i mysql-connector-java_8.0.25-1ubuntu20.04_all.deb
+RUN dpkg -i mysql-connector-java_8.0.25-1ubuntu20.04_all.deb && \
+    cp /usr/share/java/mysql* $HIVE_HOME/lib
 
 RUN useradd hive
 
