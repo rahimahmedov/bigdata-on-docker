@@ -12,6 +12,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
     container_name: mysqldb
+    hostname: mysqldb
   hadoop-base:
     build:
       context: ./images/hadoop
@@ -30,6 +31,7 @@ services:
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: hdfs-nn
     container_name: hdfs-nn
+    hostname: hdfs-nn
   hdfs-snn:
     image: hadoop-base:3.3.1      
     depends_on:
@@ -43,6 +45,7 @@ services:
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: hdfs-snn
     container_name: hdfs-snn
+    hostname: hdfs-snn
   hdfs-dn:
     image: hadoop-base:3.3.1      
     depends_on:
@@ -53,11 +56,13 @@ services:
       - "50010:50010"
       - "50020:50020"
       - "9864:9864"
+      - "9866:9866"
     volumes:
       - ./volumes/hdfs/dn:/dn
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: hdfs-dn
     container_name: hdfs-dn
+    hostname: hdfs-dn
   yarn-rm:
     image: hadoop-base:3.3.1
     depends_on:
@@ -71,6 +76,7 @@ services:
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: yarn-rm
     container_name: yarn-rm
+    hostname: yarn-rm
   yarn-nm:
     image: hadoop-base:3.3.1
     depends_on:
@@ -83,12 +89,13 @@ services:
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: yarn-nm
     container_name: yarn-nm
+    hostname: yarn-nm
   hive-base:
     build:
       context: ./images/hive
       dockerfile: Dockerfile
     image: hive-base:3.1.2
-  hiveserver:
+  hive:
     image: hive-base:3.1.2 
     depends_on:
       - hive-base
@@ -100,4 +107,5 @@ services:
     volumes:
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
     command: hiveserver2
-    container_name: hiveserver
+    container_name: hive
+    hostname: hive
