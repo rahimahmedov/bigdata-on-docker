@@ -71,6 +71,7 @@ services:
       - "8032:8032"
       - "8030:8030"
       - "8088:8088"
+      - "19888:19888"
     volumes:
       - ./volumes/yarn:/yarn
       - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
@@ -109,3 +110,24 @@ services:
     command: hiveserver2
     container_name: hive
     hostname: hive
+  zeppelin-spark-base:
+    build:
+      context: ./images/zeppelin
+      dockerfile: Dockerfile
+    image: zeppelin:0.10
+    depends_on: 
+      - hive-base
+  zeppelin:
+    image: zeppelin:0.10
+    depends_on:
+      - zeppelin-spark-base
+      - yarn-nm
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./volumes/configs/etc/hadoop/conf:/etc/hadoop/conf
+      - ./volumes/zeppelin/logs:/logs
+      - ./volumes/zeppelin/notebook:/notebook
+    hostname: zeppelin
+    container_name: zeppelin
+    command: zeppelin
