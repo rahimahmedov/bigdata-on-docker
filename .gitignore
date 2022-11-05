@@ -1,0 +1,4 @@
+volumes/zeppelin/
+volumes/dbstore/
+volumes/hdfs/
+volumes/yarn/
